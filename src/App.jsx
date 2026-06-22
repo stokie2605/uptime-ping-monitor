@@ -56,18 +56,18 @@ function App() {
       <header style={{ borderBottom: '2px solid #334155', paddingBottom: '15px', marginBottom: '25px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <div>
-            <h1 style={{ margin: '0 0 5px 0', color: '#38bdf8' }}>IT Infrastructure Uptime & Ping Monitor</h1>
+            <h1 style={{ margin: '0 0 10px 0', color: '#38bdf8', lineHeight: '1.05', fontSize: '44px' }}>IT Infrastructure Uptime & Ping Monitor</h1>
             <p style={{ margin: '0', color: '#94a3b8', fontSize: '14px' }}>Real-time local ICMP polling simulation and system diagnostic array for distributed network assets.</p>
           </div>
           <div style={{ textAlign: 'right', backgroundColor: '#1e293b', padding: '10px 15px', borderRadius: '6px', border: '1px solid #334155' }}>
             <span style={{ fontSize: '12px', color: '#94a3b8', display: 'block' }}>MONITORING AGENT</span>
-            <strong style={{ color: '#4ade80', fontSize: '14px' }}>● ACTIVE (4s Loop)</strong>
+            <strong style={{ color: '#4ade80', fontSize: '14px' }}>ACTIVE (4s Loop)</strong>
           </div>
         </div>
       </header>
 
       {/* INFRASTRUCTURE GRID */}
-      <h3 style={{ color: '#94a3b8', marginBottom: '15px' }}>🖥️ Monitored Network Hardware & Hosts</h3>
+      <h3 style={{ color: '#94a3b8', marginBottom: '15px' }}>Monitored Network Hardware & Hosts</h3>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '30px' }}>
         {servers.map(server => (
           <div key={server.id} style={{ backgroundColor: '#1e293b', border: '1px solid #334155', borderRadius: '8px', padding: '15px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -100,7 +100,7 @@ function App() {
                   onClick={() => handleRebootServer(server.id, server.name)}
                   style={{ backgroundColor: '#ef4444', color: 'white', border: 'none', padding: '8px 12px', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', fontSize: '13px' }}
                 >
-                  ⚡ Force Remote Reboot
+                  Force Remote Reboot
                 </button>
               )}
             </div>
@@ -110,7 +110,7 @@ function App() {
 
       {/* CORE SYSLOG ENGINE */}
       <div style={{ backgroundColor: '#020617', border: '1px solid #1e293b', borderRadius: '8px', padding: '20px' }}>
-        <h3 style={{ marginTop: '0', color: '#f1f5f9', borderBottom: '1px solid #1e293b', paddingBottom: '10px' }}>📋 Network Syslog Stream (SIEM Core)</h3>
+        <h3 style={{ marginTop: '0', color: '#f1f5f9', borderBottom: '1px solid #1e293b', paddingBottom: '10px' }}>Network Syslog Stream (SIEM Core)</h3>
         <div style={{ fontFamily: 'monospace', fontSize: '13px', display: 'flex', flexDirection: 'column', gap: '8px', maxHeight: '200px', overflowY: 'auto' }}>
           {logs.map((log, index) => (
             <div key={index} style={{ display: 'flex', gap: '15px', color: log.message.includes('CRITICAL') ? '#f87171' : log.message.includes('RESOLVED') ? '#4ade80' : log.message.includes('ADMIN') ? '#fbbf24' : '#94a3b8' }}>

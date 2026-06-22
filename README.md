@@ -2,6 +2,10 @@
 
 A reactive, real-time network health and infrastructure monitoring dashboard engineered to simulate automated ICMP polling loops, track network latency spikes, and generate SIEM-compliant cryptographic audit logs for distributed enterprise hardware assets.
 
+## Dashboard Preview
+
+![Uptime Ping Monitor dashboard](screenshots/uptime-preview.png)
+
 ## Key Features
 * **Asynchronous ICMP Polling Simulation:** Driven by continuous background `setInterval` polling engines that sample network endpoints every 4 seconds to detect infrastructure dropouts.
 * **Reactive Status State Machine:** Automatically transitions monitored assets through active lifecycle phases (`ONLINE` ➔ `OFFLINE` ➔ `REBOOTING`) based on simulated ping responses.
