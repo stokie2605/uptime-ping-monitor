@@ -1,5 +1,7 @@
 # IT Infrastructure Uptime & Ping Monitor
 
+[🚀 Live Demo](https://uptime-ping-monitor.vercel.app)
+
 Built by Dean Wilshaw.
 
 IT Infrastructure Uptime & Ping Monitor is a React-based network monitoring dashboard that simulates ICMP-style health checks, latency drift, offline asset detection, remote reboot triage, and SIEM-style operational logging for distributed infrastructure assets.
