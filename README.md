@@ -1,27 +1,135 @@
 # IT Infrastructure Uptime & Ping Monitor
 
-A reactive, real-time network health and infrastructure monitoring dashboard engineered to simulate automated ICMP polling loops, track network latency spikes, and generate SIEM-compliant cryptographic audit logs for distributed enterprise hardware assets.
+Built by Dean Wilshaw.
 
-## Dashboard Preview
+IT Infrastructure Uptime & Ping Monitor is a React-based network monitoring dashboard that simulates ICMP-style health checks, latency drift, offline asset detection, remote reboot triage, and SIEM-style operational logging for distributed infrastructure assets.
+
+The project demonstrates how a service desk or infrastructure team can visualize host health, capture outage events, and model manual recovery workflows in a browser-based operations console.
+
+### Visual Output / Preview
 
 ![Uptime Ping Monitor dashboard](screenshots/uptime-preview.png)
 
-## Key Features
-* **Asynchronous ICMP Polling Simulation:** Driven by continuous background `setInterval` polling engines that sample network endpoints every 4 seconds to detect infrastructure dropouts.
-* **Reactive Status State Machine:** Automatically transitions monitored assets through active lifecycle phases (`ONLINE` ➔ `OFFLINE` ➔ `REBOOTING`) based on simulated ping responses.
-* **SIEM Core Syslog Stream:** A secure, sequential logging container that parses timestamps and outputs system alert feeds tracking critical anomalies and manual administrative interventions.
-* **Manual Remote Triage Engine:** Implements simulated network handshakes via delayed timeout closures, allowing technicians to execute remote system reboots and restore dropped assets safely.
+```text
+┌────────────────────────────────┬───────────┬──────────────┬─────────────────────┐
+│ Asset                          │ Status    │ Latency      │ Operator Action      │
+├────────────────────────────────┼───────────┼──────────────┼─────────────────────┤
+│ Primary Domain Controller      │ ONLINE    │ 4ms          │ Monitor             │
+│ Corporate Email Gateway        │ ONLINE    │ 12ms         │ Monitor             │
+│ Supabase Cloud Production DB   │ ONLINE    │ 28ms         │ Monitor             │
+│ Local Warehouse Network Switch │ OFFLINE   │ TIMEOUT      │ Force Remote Reboot │
+│ Main Office VoIP Phone Server  │ ONLINE    │ 7ms          │ Monitor             │
+└────────────────────────────────┴───────────┴──────────────┴─────────────────────┘
+```
 
----
+### Monitoring Architecture & State Logic
 
-## 🛠️ Troubleshooting & Core Resolutions
+- **Asset inventory state:** The dashboard initializes five monitored infrastructure assets with name, IP address, status, uptime, and latency fields.
+- **Polling simulation:** A `setInterval` loop runs every 4 seconds to simulate recurring ICMP monitoring and intermittent latency changes.
+- **Offline guardrail:** The known offline switch is intentionally left unchanged by the polling loop until a technician triggers manual triage.
+- **Manual reboot workflow:** Selecting `Force Remote Reboot` moves an offline asset into `REBOOTING`, logs the admin action, then restores it to `ONLINE` after a simulated handshake delay.
+- **SIEM-style event stream:** Critical alerts, admin actions, and recovery events are pushed into a timestamped log feed for operational visibility.
+- **Race-condition prevention:** The polling loop avoids overwriting assets under manual recovery, keeping the state machine predictable during reboot simulation.
 
-During the design, loop structuring, and network status pipeline mapping phases, two specific engineering and file-system blocks were isolated and resolved:
+## The Business Problem
 
-### 1. Duplicate Child Directory Nesting Conflicts (`PathNotFound`)
-* **Problem:** Attempting to navigate into the project directory via the terminal returned a critical path failure (`cd : Cannot find path '.../uptime-ping-monitor/uptime-ping-monitor' because it does not exist`).
-* **Resolution:** Diagnosed via shell environment checking that the terminal context was already successfully standing in the newly initialized root folder. Running a secondary `cd` command caused the terminal to look for a nested child folder of the identical name. Resolved by bypassing the navigation command entirely and running the execution bridge (`code .`) straight from the current path.
+Infrastructure teams need fast visibility when a server, gateway, switch, or cloud service stops responding. In smaller environments, health checks may be performed manually or spread across multiple tools, making it difficult to see current status, latency symptoms, and recovery activity in one place.
 
-### 2. Multi-Thread State Mutation Leakage during Server Reboots
-* **Problem:** Triggering a remote reboot sequence on a dropped server while the background 4-second polling loop was actively running caused the server status to rapidly flash or get stuck between `REBOOTING` and `OFFLINE`.
-* **Resolution:** Isolated as an asynchronous race condition. The background polling interval was overwriting the server array state before the reboot timeout completed its execution block. Resolved by adding an immutable state verification guard inside the `useEffect` hook (`if (server.id === 4 && server.status === 'OFFLINE') return server;`), ensuring the automatic polling loop completely ignores an asset under triage until the manual reboot handshake cleanly resolves.
+Common operational problems include:
+
+- Network outages are difficult to triage without a live status board.
+- Manual ping checks do not create consistent evidence.
+- Latency drift can be missed until users report performance issues.
+- Offline devices need a clear escalation and recovery workflow.
+- Support teams need event logs that show what happened and when.
+- Automated polling can conflict with manual recovery state if not guarded properly.
+
+## The Solution & Architecture
+
+The app models a lightweight infrastructure monitoring console:
+
+```text
+React Asset Inventory
+        |
+        +--> 4-second polling loop
+        |       |
+        |       +--> latency variance simulation
+        |       +--> offline asset guard
+        |
+        +--> Manual reboot action
+        |       |
+        |       +--> REBOOTING state
+        |       +--> delayed recovery
+        |       +--> ONLINE state
+        |
+        v
+Timestamped Syslog Stream
+```
+
+## Technical Toolkit
+
+- React
+- Vite
+- JavaScript
+- React hooks
+- Simulated ICMP polling
+- Browser-based operational dashboard UI
+- Local state-driven event logging
+
+## Local Execution Setup
+
+### Install Dependencies
+
+```bash
+npm install
+```
+
+### Start Development Server
+
+```bash
+npm run dev
+```
+
+### Build for Production
+
+```bash
+npm run build
+```
+
+### Preview Production Build
+
+```bash
+npm run preview
+```
+
+## Simulated Asset Model
+
+Each monitored asset follows this structure:
+
+```json
+{
+  "id": 4,
+  "name": "Local Warehouse Network Switch",
+  "ip": "192.168.1.254",
+  "status": "OFFLINE",
+  "uptime": "94.23%",
+  "latency": "TIMEOUT"
+}
+```
+
+Supported status values:
+
+```text
+ONLINE      Healthy polling state
+OFFLINE     Failed ICMP response / timeout state
+REBOOTING   Manual recovery action in progress
+```
+
+## Production Readiness Notes
+
+- Replace simulated polling with real API-backed health checks.
+- Add persistent event storage for audit and post-incident review.
+- Add alert thresholds for latency, packet loss, and uptime degradation.
+- Add user roles for service desk, infrastructure, and admin operators.
+- Add integrations for ticket creation, SIEM forwarding, or chat alerts.
+- Add tests around polling state transitions and reboot recovery behavior.
