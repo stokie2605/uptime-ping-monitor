@@ -1,6 +1,6 @@
 # IT Infrastructure Uptime & Ping Monitor
 
-[🚀 Live Demo](https://uptime-ping-monitor.vercel.app)
+[Live Demo](https://uptime-ping-monitor.vercel.app)
 
 Built by Dean Wilshaw.
 
@@ -12,17 +12,13 @@ The project demonstrates how a service desk or infrastructure team can visualize
 
 ![Uptime Ping Monitor dashboard](screenshots/uptime-preview.png)
 
-```text
-┌────────────────────────────────┬───────────┬──────────────┬─────────────────────┐
-│ Asset                          │ Status    │ Latency      │ Operator Action      │
-├────────────────────────────────┼───────────┼──────────────┼─────────────────────┤
-│ Primary Domain Controller      │ ONLINE    │ 4ms          │ Monitor             │
-│ Corporate Email Gateway        │ ONLINE    │ 12ms         │ Monitor             │
-│ Supabase Cloud Production DB   │ ONLINE    │ 28ms         │ Monitor             │
-│ Local Warehouse Network Switch │ OFFLINE   │ TIMEOUT      │ Force Remote Reboot │
-│ Main Office VoIP Phone Server  │ ONLINE    │ 7ms          │ Monitor             │
-└────────────────────────────────┴───────────┴──────────────┴─────────────────────┘
-```
+| Asset | Status | Latency | Operator Action |
+| --- | --- | --- | --- |
+| Primary Domain Controller | ONLINE | 4ms | Monitor |
+| Corporate Email Gateway | ONLINE | 12ms | Monitor |
+| Supabase Cloud Production DB | ONLINE | 28ms | Monitor |
+| Local Warehouse Network Switch | OFFLINE | TIMEOUT | Force Remote Reboot |
+| Main Office VoIP Phone Server | ONLINE | 7ms | Monitor |
 
 ### Monitoring Architecture & State Logic
 
@@ -135,3 +131,8 @@ REBOOTING   Manual recovery action in progress
 - Add user roles for service desk, infrastructure, and admin operators.
 - Add integrations for ticket creation, SIEM forwarding, or chat alerts.
 - Add tests around polling state transitions and reboot recovery behavior.
+
+## Reviewer Notes
+
+- Real integration path: [docs/REAL_CHECKS.md](docs/REAL_CHECKS.md)
+- Current probe data is simulated intentionally so the dashboard can be reviewed without privileged network access.
