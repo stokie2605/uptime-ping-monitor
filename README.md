@@ -1,5 +1,7 @@
 # IT Infrastructure Uptime & Ping Monitor
 
+[![CI](https://github.com/stokie2605/uptime-ping-monitor/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/stokie2605/uptime-ping-monitor/actions/workflows/ci.yml)
+
 [Live Demo](https://uptime-ping-monitor.vercel.app)
 
 Built by Dean Wilshaw.
