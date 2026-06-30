@@ -123,6 +123,21 @@ OFFLINE     Failed ICMP response / timeout state
 REBOOTING   Manual recovery action in progress
 ```
 
+## ✅ Automated Testing
+
+The project includes a Jest unit test suite that covers the core infrastructure monitoring and status state transitions:
+- **Offline state protection:** Asserts that when a device is offline, its latency metrics are correctly handled.
+- **Polling Behavior:** Validates status changes, latency calculations, and uptime records during regular operational checks.
+- **Recovery Transitions:** Tests manual reboot triggers and the automated recovery timeline.
+- **Log Aggregation:** Confirms that status changes are logged correctly.
+
+To run the test suite locally:
+```bash
+npm run test
+```
+
+The GitHub Actions CI pipeline runs these tests automatically on every push.
+
 ## Production Readiness Notes
 
 - Replace simulated polling with real API-backed health checks.

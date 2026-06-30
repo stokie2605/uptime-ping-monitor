@@ -1,36 +1,25 @@
 import { useState, useEffect } from 'react';
+import {
+  applyPollingLatencyUpdate,
+  completeRebootTransition,
+  createAdminActionLog,
+  createResolvedLog,
+  initialLogs,
+  initialServers,
+  startRebootTransition,
+} from './monitorLogic';
 
 function App() {
   // Initialize standard network assets with individual status and IP configurations
-  const [servers, setServers] = useState([
-    { id: 1, name: 'Primary Domain Controller (AD)', ip: '10.0.0.4', status: 'ONLINE', uptime: '99.98%', latency: '4ms' },
-    { id: 2, name: 'Corporate Email Gateway (Exchange)', ip: '10.0.0.12', status: 'ONLINE', uptime: '99.91%', latency: '12ms' },
-    { id: 3, name: 'Supabase Cloud Production DB', ip: '142.250.178.14', status: 'ONLINE', uptime: '100%', latency: '28ms' },
-    { id: 4, name: 'Local Warehouse Network Switch', ip: '192.168.1.254', status: 'OFFLINE', uptime: '94.23%', latency: 'TIMEOUT' },
-    { id: 5, name: 'Main Office VoIP Phone Server', ip: '10.0.2.55', status: 'ONLINE', uptime: '99.74%', latency: '7ms' }
-  ]);
+  const [servers, setServers] = useState(initialServers);
 
-  const [logs, setLogs] = useState([
-    { time: '20:14:02', message: 'CRITICAL ALERT: Local Warehouse Network Switch [192.168.1.254] failed ICMP echo ping response.' },
-    { time: '19:45:11', message: 'SYSTEM INFO: Supabase Cloud Production DB baseline latency stabilized at 28ms.' }
-  ]);
+
+  const [logs, setLogs] = useState(initialLogs);
 
   // Simulate automated recurring network polling loops
   useEffect(() => {
     const interval = setInterval(() => {
-      setServers(prevServers => 
-        prevServers.map(server => {
-          // Leave the offline switch alone unless manual triage occurs
-          if (server.id === 4 && server.status === 'OFFLINE') return server;
-
-          // Introduce a 5% chance of intermittent latency variance on healthy machines
-          if (Math.random() > 0.95) {
-            const randomLatency = Math.floor(Math.random() * 40) + 2;
-            return { ...server, latency: `${randomLatency}ms` };
-          }
-          return server;
-        })
-      );
+      setServers(prevServers => applyPollingLatencyUpdate(prevServers));
     }, 4000);
 
     return () => clearInterval(interval);
@@ -39,15 +28,15 @@ function App() {
   // Simulate an administrator manual ICMP Ping / System Reboot triage cycle
   function handleRebootServer(id, name) {
     // Instantly flash the UI into a pending state
-    setServers(prev => prev.map(s => s.id === id ? { ...s, status: 'REBOOTING', latency: 'POLLING...' } : s));
+    setServers(prev => startRebootTransition(prev, id));
     
     const timestamp = new Date().toLocaleTimeString();
-    setLogs(prev => [{ time: timestamp, message: `ADMIN ACTION: Initialized remote system reboot sequence on asset: ${name}.` }, ...prev]);
+    setLogs(prev => [createAdminActionLog(timestamp, name), ...prev]);
 
     // Simulate network delay for operating system initialization and port listening
     setTimeout(() => {
-      setServers(prev => prev.map(s => s.id === id ? { ...s, status: 'ONLINE', latency: '5ms', uptime: '94.24%' } : s));
-      setLogs(prev => [{ time: new Date().toLocaleTimeString(), message: `RESOLVED: Asset ${name} back online. ICMP handshake verification success.` }, ...prev]);
+      setServers(prev => completeRebootTransition(prev, id));
+      setLogs(prev => [createResolvedLog(new Date().toLocaleTimeString(), name), ...prev]);
     }, 3000);
   }
 
