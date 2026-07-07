@@ -10,6 +10,17 @@ IT Infrastructure Uptime & Ping Monitor is a React-based network monitoring dash
 
 The project demonstrates how a service desk or infrastructure team can visualize host health, capture outage events, and model manual recovery workflows in a browser-based operations console.
 
+## Project Snapshot
+
+| Capability | Implementation |
+| --- | --- |
+| Monitoring model | Simulated uptime, latency, outage, and recovery states |
+| Operations workflow | Manual reboot triage with protected recovery state |
+| Event visibility | Timestamped SIEM-style activity stream |
+| Frontend stack | React, Vite, JavaScript, CSS |
+| Verification | Node test runner plus GitHub Actions CI |
+| Review mode | Live demo and screenshot included for quick inspection |
+
 ### Visual Output / Preview
 
 ![Uptime Ping Monitor dashboard](screenshots/uptime-preview.png)
@@ -125,9 +136,9 @@ OFFLINE     Failed ICMP response / timeout state
 REBOOTING   Manual recovery action in progress
 ```
 
-## ✅ Automated Testing
+## Automated Testing
 
-The project includes a Jest unit test suite that covers the core infrastructure monitoring and status state transitions:
+The project includes a Node test runner suite that covers the core infrastructure monitoring and status state transitions:
 - **Offline state protection:** Asserts that when a device is offline, its latency metrics are correctly handled.
 - **Polling Behavior:** Validates status changes, latency calculations, and uptime records during regular operational checks.
 - **Recovery Transitions:** Tests manual reboot triggers and the automated recovery timeline.
@@ -147,7 +158,7 @@ The GitHub Actions CI pipeline runs these tests automatically on every push.
 - Add alert thresholds for latency, packet loss, and uptime degradation.
 - Add user roles for service desk, infrastructure, and admin operators.
 - Add integrations for ticket creation, SIEM forwarding, or chat alerts.
-- Add tests around polling state transitions and reboot recovery behavior.
+- Expand tests around alert thresholds, incident timelines, and role-based operator actions.
 
 ## Reviewer Notes
 
