@@ -13,7 +13,7 @@ export const initialLogs = [
 
 export function applyPollingLatencyUpdate(servers, random = Math.random) {
   return servers.map((server) => {
-    if (server.id === 4 && server.status === 'OFFLINE') return server;
+    if (server.status === 'OFFLINE' || server.status === 'REBOOTING') return server;
 
     if (random() > 0.95) {
       const randomLatency = Math.floor(random() * 40) + 2;

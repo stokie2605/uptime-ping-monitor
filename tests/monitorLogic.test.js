@@ -17,6 +17,15 @@ test('keeps offline switch unchanged during automated polling', () => {
   assert.equal(offlineSwitch.latency, 'TIMEOUT');
 });
 
+test('keeps rebooting servers unchanged during automated polling', () => {
+  const rebooting = startRebootTransition(initialServers, 4);
+  const updated = applyPollingLatencyUpdate(rebooting, () => 0.99);
+  const rebootingServer = updated.find((server) => server.id === 4);
+
+  assert.equal(rebootingServer.status, 'REBOOTING');
+  assert.equal(rebootingServer.latency, 'POLLING...');
+});
+
 test('updates latency for online servers when polling variance is triggered', () => {
   const randomValues = [0.99, 0.5, 0.1, 0.1, 0.1, 0.1];
   const updated = applyPollingLatencyUpdate([initialServers[0]], () => randomValues.shift() ?? 0);
