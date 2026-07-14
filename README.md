@@ -1,15 +1,24 @@
-# Uptime Ping Monitor — Infrastructure SRE Dashboard
-> **The 1-Line Mission:** Browser-based SRE uptime monitoring dashboard simulating ICMP ping health checks and SIEM log streaming for IT infrastructure fleets.
+# Infrastructure Ping & Service Alert Engine
 
-### ⚡ Engineering Breakdown
-* **The Problem:** SRE and MSP environments need a lightweight, real-time visual interface for network asset status monitoring — without expensive SaaS monitoring platforms or complex backend infrastructure for portfolio and proof-of-concept deployments.
-* **The Solution:** A React SPA with cleanly separated business logic (`monitorLogic.js`) driving a 4-second polling simulation loop, manual reboot workflows with state transitions (ONLINE → REBOOTING → ONLINE), and a live SIEM-style syslog stream — all tested with Node.js built-in test runner on pure functions using dependency-injected randomness.
-* **The Tech Stack:** `React 19` `Vite 8` `JavaScript` `Node.js test runner`
+A lightweight network polling utility designed to continuously audit server availability, track latency patterns, and route critical offline alerts to administrative webhooks.
+
+<div align="center">
+  <img src="screenshots/uptime-preview.png" width="800" alt="Uptime Monitor Dashboard">
+</div>
 
 ---
 
-## 🎥 Visual Preview
-![Uptime Monitor Dashboard](screenshots/uptime-preview.png)
+## Operational Focus
+* **The Problem:** High-cost monitoring suites can be overly complex to configure for simple, rapid status pinging across a small-to-medium enterprise footprint.
+* **The Solution:** A highly optimized polling engine that monitors specified target IP addresses, logs response metrics, and dispatches real-time webhook alerts when a server drops offline.
+
+---
+
+## Core Capabilities
+* **Multi-Host ICMP/HTTP Polling:** Asynchronous background service that continuously verifies network availability across diverse endpoints.
+* **Syslog Metric Generation:** Logs response times, packet loss statistics, and state changes to a centralized structured format for diagnostic auditing.
+* **Immediate Webhook Alert Routing:** Instantly parses down states and packages payload data to trigger external alerts (Discord, Slack, or ticketing platforms).
+* **Resilient State Auditing:** Prevents false alarms by executing consecutive verification retries before flagging an asset as officially offline.
 
 ---
 
@@ -78,9 +87,10 @@ Navigate to `http://localhost:5173`.
 npm run test
 ```
 
+---
 
-### Recent Project Cleanups & Upgrades
-* **Project Organization:** Cleaned up project folders by separating backend logic, frontend code, and testing suites.
-* **Security Fixes:** Swapped out weak authentication methods for secure hashing and tokens to protect user data.
-* **Database Tuning:** Reorganized database tables and data types to make queries run faster and handle dates/times properly.
-* **Code Cleanup:** Removed dead code, optimized slow loops, and set up strict linting rules to keep the codebase easy to read.
+## Recent Architectural Upgrades
+* **Operational Restructuring:** Standardized repository file hierarchies by separating core automation logic, helper scripts, and test files.
+* **Security Hardening:** Swapped legacy credential configs for environment variables and secure token validation policies.
+* **Database Schema Upgrades:** Refactored primitive database types into native data structures for robust ORM and transaction handling.
+* **Systems Maintenance:** Eradinated legacy diagnostic scripts, optimized loops, and established static analysis scanning to ensure code hygiene.
